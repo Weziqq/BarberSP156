@@ -8,8 +8,13 @@ document.addEventListener("DOMContentLoaded", () => {
     spinner.classList.add("spinner");
     document.body.appendChild(spinner);
 
-    const showSpinner = () => spinner.style.display = "block";
-    const hideSpinner = () => spinner.style.display = "none";
+    const showSpinner = () => {
+        spinner.style.display = "block";
+    };
+
+    const hideSpinner = () => {
+        spinner.style.display = "none";
+    };
 
     // Utworzenie elementu do komunikatów o błędach
     const errorContainer = document.createElement("div");
@@ -42,16 +47,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 3000);
     };
 
-    // Obsługa przełączania trybu ciemnego
-    const darkToggle = document.getElementById("dark-mode-toggle");
-    if (darkToggle) {
-        darkToggle.addEventListener("click", () => {
-            document.body.classList.toggle("dark-mode");
-            const mode = document.body.classList.contains("dark-mode") ? "Ciemny" : "Jasny";
-            showToast(`Tryb ${mode} został aktywowany`);
-        });
-    }
-
     // Delegacja zdarzeń w nawigacji
     nav.addEventListener("click", async event => {
         const link = event.target.closest("a[data-page]");
@@ -63,6 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
             try {
                 showSpinner();
                 clearError();
+
                 // Dodanie klasy animacji wyjścia dla płynnego przejścia
                 content.classList.add("fade-out");
                 await new Promise(resolve => setTimeout(resolve, 300));
