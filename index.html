@@ -3,38 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Barber SP156</title>
-    <link rel="icon" type="image/png" href="images/barber.png">
+    <title>Barber SP156 - Profesjonalne strzyżenie i pielęgnacja</title>
+
+    <!-- Ikona i style -->
+    <link rel="icon" type="image/png" href="images/logo.png">
     <link rel="stylesheet" href="style.css">
     <script defer src="script.js"></script>
-    <meta name="description" content="Barber SP156 - Professional haircuts and grooming services.">
+
+    <!-- SEO Metadane -->
+    <meta name="description" content="Barber SP156 - Profesjonalne usługi fryzjerskie i barberskie">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="Barber SP156">
+
+    <!-- Sociale metadane -->
     <meta property="og:title" content="Barber SP156">
-    <meta property="og:description" content="Professional haircuts and grooming services.">
-    <meta property="og:image" content="images/barber.png">
+    <meta property="og:description" content="Profesjonalne usługi fryzjerskie i barberskie">
+    <meta property="og:image" content="images/logo.png">
     <meta property="og:url" content="https://barbersp156.store/">
     <meta name="twitter:card" content="summary_large_image">
 </head>
 <body>
 <header>
-    <img class="logo" src="images/barber.png" alt="Logo Barber SP156" loading="lazy">
+    <a href="index.html" aria-label="Strona główna">
+        <img class="logo" src="images/logo.png" alt="Logo Barber SP156" loading="lazy">
+    </a>
     <h2>Profesjonalne strzyżenie i pielęgnacja</h2>
 </header>
 
 <nav aria-label="Główna nawigacja">
     <ul>
         <li>
-            <a href="#" data-page="strona-glowna.html" aria-label="Strona Główna">Strona Główna</a>
+            <a href="#" data-page="co-oferujemy.html" aria-label="Co oferujemy">Co oferujemy?</a>
         </li>
         <li class="dropdown">
             <a href="#" data-page="uslugi.html" aria-haspopup="true" aria-expanded="false" aria-label="Usługi">
                 Usługi &#9660;
             </a>
-            <ul class="dropdown-menu" aria-label="Podmenu">
+            <ul class="dropdown-menu" aria-label="Podmenu usług">
                 <li>
                     <a href="#" data-page="strzyżenie.html" aria-label="Strzyżenie">Strzyżenie</a>
                 </li>
                 <li>
                     <a href="#" data-page="stylizacja.html" aria-label="Stylizacja">Stylizacje</a>
+                </li>
+                <li>
+                    <a href="#" data-page="poprawki.html" aria-label="Poprawki">Poprawki</a>
                 </li>
             </ul>
         </li>
@@ -55,17 +68,25 @@
 
 <main class="content" id="content">
     <section class="home">
-        <h3>Witamy w Barber SP156</h3>
+        <h3 class="scroll-animation">Witamy w Barber SP156</h3>
         <p>Zapewniamy najwyższą jakość usług fryzjerskich i barberskich.</p>
     </section>
 </main>
 
+<!-- Przycisk powrotu do góry -->
+<button id="backToTop" aria-label="Powrót do góry">↑</button>
+
 <footer>
-    <p>&copy; 2025 Barber SP156</p>
-    <p>
-        <a href="https://www.instagram.com/barbersp156/" target="_blank" rel="noopener noreferrer">Instagram</a> |
-        <a href="https://maps.app.goo.gl/y7Jf86CkkEnMPBr66" target="_blank" rel="noopener noreferrer">Google Maps</a>
-    </p>
+    <div class="footer-content">
+        <p>&copy; <time datetime="2025">2025</time> Barber SP156. Wszelkie prawa zastrzeżone.</p>
+        <address>
+            <p>Email: <a href="mailto:barbersp156@gmail.com">barbersp156@gmail.com</a></p>
+        </address>
+        <div class="social-links">
+            <a href="https://www.instagram.com/barbersp156/" target="_blank" rel="noopener noreferrer">Instagram</a> |
+            <a href="https://maps.app.goo.gl/y7Jf86CkkEnMPBr66" target="_blank" rel="noopener noreferrer">Google Maps</a>
+        </div>
+    </div>
 </footer>
 </body>
 </html>

@@ -1,27 +1,27 @@
 /* Import Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Text:ital@0;1&display=swap');
 
+/* Zmienne globalne */
 :root {
     --primary-color: #444;
     --secondary-color: #cfa760;
     --background-color: #f2f1ef;
-    --font-family: 'Playfair Display', serif;
-    --header-font-size: 24px;
-    --h1-font-size: 50px;
-    --h2-font-size: 18px;
-    --nav-font-size: 16px;
+    --font-family: 'Playfair Display', serif, serif;
+    --header-font-size: 1.5rem;      /* ~24px */
+    --h1-font-size: 3.125rem;        /* ~50px */
+    --h2-font-size: 1.125rem;        /* ~18px */
+    --nav-font-size: 1rem;           /* ~16px */
     --transition-duration: 0.3s;
     --spinner-color: #cfa760;
+    --border-radius: 0.25rem;        /* ~4px */
 }
 
-/* Global box-sizing for consistent layouts */
-*,
-*::before,
-*::after {
+/* Globalne ustawienie box-sizing */
+*, *::before, *::after {
     box-sizing: border-box;
 }
 
-/* Base body styling */
+/* Styl podstawowy body */
 body {
     font-family: var(--font-family);
     margin: 0;
@@ -35,10 +35,10 @@ body {
     min-height: 100vh;
 }
 
-/* Header styling */
+/* Styl nagłówka */
 header {
-    background: var(--background-color);
-    padding: 30px 0;
+    background-color: var(--background-color);
+    padding: 1.875rem 0;  /* 30px */
     font-size: var(--header-font-size);
     animation: fadeIn 1s ease-in-out;
 }
@@ -46,29 +46,35 @@ header {
 h1 {
     font-size: var(--h1-font-size);
     margin: 0;
-    letter-spacing: 2px;
+    letter-spacing: 0.125rem; /* 2px */
 }
 
 h2 {
     font-size: var(--h2-font-size);
-    color: #666;
+    color: var(--primary-color);
 }
 
 h3 {
     font-size: var(--header-font-size);
     color: var(--primary-color);
-    margin-bottom: 20px;
+    margin-bottom: 1.25rem; /* 20px */
 }
 
-/* Paragraph styling */
+/* Styl akapitów */
 p {
-    margin: 0 0 20px;
+    margin: 0 0 1.25rem;  /* 20px */
     line-height: 1.6;
 }
 
-/* Navigation styling */
+/* Nawigacja – sticky oraz ulepszone przejścia */
+/* Pozycja sticky umożliwia przyklejenie nawigacji do góry ekranu */
 nav {
-    margin-top: 20px;
+    margin-top: 1.25rem;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background-color: var(--background-color);
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
 }
 
 nav::before {
@@ -77,7 +83,7 @@ nav::before {
     width: 80%;
     height: 1px;
     background: rgba(242, 241, 239, 0.85);
-    margin: 0 auto 10px;
+    margin: 0 auto 0.625rem; /* 10px */
 }
 
 nav ul {
@@ -90,36 +96,51 @@ nav ul {
 
 nav ul li {
     position: relative;
-    margin: 0 15px;
+    margin: 0 0.9375rem; /* 15px */
 }
 
 nav ul li a {
     color: var(--primary-color);
     text-decoration: none;
     font-size: var(--nav-font-size);
-    padding: 10px;
-    transition: color var(--transition-duration), background-color var(--transition-duration);
-    border-radius: 4px;
+    padding: 0.625rem; /* 10px */
+    transition: color var(--transition-duration), background-color var(--transition-duration), transform var(--transition-duration);
+    border-radius: var(--border-radius);
 }
 
+/* Efekt hover – delikatne powiększenie oraz zmiana koloru */
 nav ul li a:hover,
 nav ul li a:focus {
     color: var(--secondary-color);
     background-color: rgba(0, 0, 0, 0.05);
+    transform: scale(1.05);
+    outline: none;
 }
 
-/* Dropdown styling */
+/* Styl stanu focus – dodatkowo widoczny focus */
+nav ul li a:focus-visible {
+    outline: 2px dashed var(--secondary-color);
+    outline-offset: 4px;
+}
+
+/* Styl aktywnego elementu menu */
+nav ul li a.active {
+    color: var(--secondary-color);
+    border-bottom: 2px solid var(--secondary-color);
+}
+
+/* Dropdown menu – zachowana struktura */
 .dropdown-menu {
     display: none;
     position: absolute;
     top: 100%;
     left: 0;
-    background: #fff;
-    box-shadow: 0 8px 8px rgba(0, 0, 0, 0.1);
-    padding: 10px;
+    background-color: #fff;
+    box-shadow: 0 0.5rem 0.5rem rgba(0, 0, 0, 0.1);
+    padding: 0.625rem; /* 10px */
     border: 1px solid #eee;
-    border-radius: 4px;
-    min-width: 150px;
+    border-radius: var(--border-radius);
+    min-width: 9.375rem; /* 150px */
     z-index: 1000;
 }
 
@@ -129,61 +150,69 @@ nav ul li a:focus {
 }
 
 .dropdown-menu li {
-    margin: 5px 0;
+    margin: 0.3125rem 0; /* 5px */
 }
 
 .dropdown-menu li a {
-    padding: 8px;
+    padding: 0.5rem; /* 8px */
     display: block;
 }
 
-/* Main content styling */
+/* Główna zawartość */
 .content {
-    padding: 50px;
+    padding: 3.125rem; /* 50px */
     animation: fadeIn 1s ease-in-out;
     flex: 1;
-    max-width: 800px;
+    max-width: 50rem; /* 800px */
     margin: 0 auto;
 }
 
-/* Loader/spinner for asynchronous actions */
+/* Loader/spinner dla akcji asynchronicznych */
 .spinner {
     display: none;
     position: fixed;
     top: 50%;
     left: 50%;
-    width: 50px;
-    height: 50px;
-    border: 5px solid rgba(0, 0, 0, 0.1);
-    border-top: 5px solid var(--spinner-color);
+    width: 3.125rem;  /* 50px */
+    height: 3.125rem; /* 50px */
+    border: 0.3125rem solid rgba(0, 0, 0, 0.1); /* 5px */
+    border-top: 0.3125rem solid var(--spinner-color);
     border-radius: 50%;
     animation: spin 1s linear infinite;
     transform: translate(-50%, -50%);
 }
 
-/* Spinner animation */
+/* Animacja spinnera */
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
-/* Simple fadeIn animation */
+/* Animacja fadeIn */
 @keyframes fadeIn {
-    0% { opacity: 0; }
-    100% { opacity: 1; }
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }
 
-/* Footer styling */
+/* Styl stopki */
 footer {
     background-color: var(--primary-color);
     color: #fff;
-    padding: 20px 0;
-    font-size: 14px;
+    padding: 1.25rem 0;  /* 20px */
+    font-size: 0.875rem; /* 14px */
     text-align: center;
 }
 
 footer p {
-    margin: 5px 0;
+    margin: 0.3125rem 0; /* 5px */
 }
 
 footer a {
@@ -197,15 +226,15 @@ footer a:focus {
     color: #fff;
 }
 
-/* Price list table styling */
+/* Styl tabeli z cennikiem */
 .price-list {
     width: 100%;
     border-collapse: collapse;
-    margin: 20px 0;
+    margin: 1.25rem 0;
 }
 
 .price-list td {
-    padding: 10px;
+    padding: 0.625rem;    /* 10px */
     border: 1px solid #ddd;
     text-align: center;
 }
@@ -214,54 +243,67 @@ footer a:focus {
     background-color: #f2f2f2;
 }
 
-.price-list tr:hover {
-    background-color: #ddd;
-}
-
-.price-list td:first-child {
-    font-weight: bold;
-}
-
-/* Section heading and contact info styles */
-.section-title {
-    font-size: var(--header-font-size);
-    color: var(--primary-color);
-    margin-bottom: 20px;
-}
-
-.contact-info {
-    font-size: var(--nav-font-size);
-    color: var(--primary-color);
-}
-
-/* Responsive adjustments */
-@media (max-width: 600px) {
-    body {
-        font-size: 16px;
-        padding: 10px;
+/* Zapytania medialne dla responsywności */
+/* Dla urządzeń mobilnych */
+@media (max-width: 768px) {
+    .content {
+        padding: 1.875rem;  /* 30px */
     }
-
+    header {
+        padding: 1.25rem 0;  /* 20px */
+        font-size: calc(var(--header-font-size) * 0.9);
+    }
+    h1 {
+        font-size: calc(var(--h1-font-size) * 0.9);
+    }
+    h2,
+    h3 {
+        font-size: calc(var(--h2-font-size) * 0.9);
+    }
+    /* Nawigacja – układ pionowy */
     nav ul {
         flex-direction: column;
-        gap: 10px;
+        align-items: center;
     }
-
-    .logo {
-        width: 80%;
-        max-width: 100px;
-        height: auto;
+    nav ul li {
+        margin: 0.625rem 0; /* 10px */
     }
+}
 
-    header {
-        padding: 20px 0;
-    }
-
+/* Nowy breakpoint dla tabletów */
+@media (min-width: 769px) and (max-width: 1024px) {
     .content {
-        padding: 30px 10px;
+        padding: 2.5rem; /* 40px */
     }
+    nav ul li {
+        margin: 0 0.75rem; /* mniejsze odstępy */
+    }
+}
 
-    footer {
-        padding: 10px 0;
-        font-size: 12px;
-    }
+#backToTop {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background-color: var(--secondary-color);
+    color: #fff;
+    border: none;
+    border-radius: var(--border-radius);
+    padding: 0.5rem 0.75rem;
+    font-size: 1rem;
+    cursor: pointer;
+    display: none;
+    z-index: 1001;
+    transition: opacity 0.3s, transform 0.3s;
+}
+
+#backToTop.show {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+#backToTop:hover,
+#backToTop:focus {
+    opacity: 0.8;
+    transform: translateY(-5px);
 }

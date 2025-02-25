@@ -1,93 +1,184 @@
 document.addEventListener("DOMContentLoaded", () => {
+    // Wybieramy elementy DOM
     const nav = document.querySelector("nav");
     const content = document.getElementById("content");
-    const cache = {};
+    const cache = new Map();
+    const MAX_CACHE_SIZE = 10;
 
-    // Utworzenie spinnera do wskazywania ładowania
-    const spinner = document.createElement("div");
-    spinner.classList.add("spinner");
-    document.body.appendChild(spinner);
+    // UI – zarządzanie interfejsem (spinner, wyświetlanie błędów)
+    const UI = {
+        spinner: null,
+        errorContainer: null,
 
-    const showSpinner = () => {
-        spinner.style.display = "block";
-    };
+        init() {
+            this.createSpinner();
+            this.createErrorContainer();
+        },
 
-    const hideSpinner = () => {
-        spinner.style.display = "none";
-    };
+        createSpinner() {
+            this.spinner = document.createElement("div");
+            this.spinner.classList.add("spinner");
+            this.spinner.setAttribute("aria-label", "Ładowanie");
+            document.body.appendChild(this.spinner);
+        },
 
-    // Utworzenie elementu do komunikatów o błędach
-    const errorContainer = document.createElement("div");
-    errorContainer.id = "error-message";
-    errorContainer.setAttribute("role", "alert");
-    errorContainer.setAttribute("aria-live", "assertive");
-    errorContainer.style.display = "none";
-    errorContainer.style.margin = "20px 0";
-    content.parentNode.insertBefore(errorContainer, content);
+        createErrorContainer() {
+            this.errorContainer = document.createElement("div");
+            this.errorContainer.id = "error-message";
+            this.errorContainer.setAttribute("role", "alert");
+            this.errorContainer.setAttribute("aria-live", "assertive");
+            content.parentNode.insertBefore(this.errorContainer, content);
+        },
 
-    const displayError = message => {
-        errorContainer.textContent = message;
-        errorContainer.style.display = "block";
-    };
+        showSpinner() {
+            if (this.spinner) this.spinner.style.display = "block";
+        },
 
-    const clearError = () => {
-        errorContainer.textContent = "";
-        errorContainer.style.display = "none";
-    };
+        hideSpinner() {
+            if (this.spinner) this.spinner.style.display = "none";
+        },
 
-    // Funkcja wyświetlająca powiadomienie (toast)
-    const showToast = message => {
-        const toast = document.createElement("div");
-        toast.className = "toast";
-        toast.textContent = message;
-        document.body.appendChild(toast);
-        setTimeout(() => {
-            toast.classList.add("hide");
-            toast.addEventListener("transitionend", () => toast.remove());
-        }, 3000);
-    };
+        displayError(message) {
+            if (this.errorContainer) {
+                this.errorContainer.textContent = message;
+                this.errorContainer.style.display = "block";
+                this.errorContainer.classList.add("error-shake");
 
-    // Delegacja zdarzeń w nawigacji
-    nav.addEventListener("click", async event => {
-        const link = event.target.closest("a[data-page]");
-        if (!link) return;
-        event.preventDefault();
+                setTimeout(() => {
+                    this.errorContainer.classList.remove("error-shake");
+                }, 500);
+            }
+        },
 
-        const page = link.getAttribute("data-page");
-        if (page) {
-            try {
-                showSpinner();
-                clearError();
-
-                // Dodanie klasy animacji wyjścia dla płynnego przejścia
-                content.classList.add("fade-out");
-                await new Promise(resolve => setTimeout(resolve, 300));
-
-                let pageContent;
-                // Sprawdzenie cache
-                if (cache[page]) {
-                    pageContent = cache[page];
-                } else {
-                    const response = await fetch(page);
-                    if (!response.ok) {
-                        throw new Error(`Network error: ${response.statusText}`);
-                    }
-                    pageContent = await response.text();
-                    cache[page] = pageContent;
-                }
-
-                content.innerHTML = pageContent;
-                // Usunięcie klasy fade-out i dodanie fade-in
-                content.classList.remove("fade-out");
-                content.classList.add("fade-in");
-                setTimeout(() => content.classList.remove("fade-in"), 300);
-            } catch (error) {
-                content.innerHTML = "<p>Wystąpił błąd przy ładowaniu strony.</p>";
-                displayError("Nie udało się załadować treści. Sprawdź połączenie internetowe.");
-                console.error("Błąd ładowania strony:", error);
-            } finally {
-                hideSpinner();
+        clearError() {
+            if (this.errorContainer) {
+                this.errorContainer.textContent = "";
+                this.errorContainer.style.display = "none";
             }
         }
+    };
+
+    UI.init();
+
+    // Funkcja pomocnicza do logowania odsłon strony (można rozszerzyć)
+    const logPageView = (page) => {
+        console.log(`Odwiedzono stronę: ${page}`);
+    };
+
+    // Funkcja pobierająca zawartość strony z określonym timeoutem
+    const fetchPageWithTimeout = async (url, timeout = 5000) => {
+        try {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), timeout);
+
+            const response = await fetch(url, {
+                signal: controller.signal,
+                headers: {
+                    "Cache-Control": "no-cache"
+                }
+            });
+
+            clearTimeout(timeoutId);
+
+            if (!response.ok) {
+                throw new Error(`Błąd sieci: ${response.status}`);
+            }
+
+            return await response.text();
+        } catch (error) {
+            console.error("Błąd pobierania:", error);
+            throw error;
+        }
+    };
+
+    // Zarządzanie rozmiarem cache
+    const manageCacheSize = (page) => {
+        if (cache.size >= MAX_CACHE_SIZE) {
+            const oldestPage = cache.keys().next().value;
+            cache.delete(oldestPage);
+        }
+        return page;
+    };
+
+    // Obsługa nawigacji po stronach
+    const handleNavigation = async (page) => {
+        try {
+            UI.showSpinner();
+            UI.clearError();
+
+            content.classList.add("fade-out");
+            await new Promise(resolve => setTimeout(resolve, 300));
+
+            let pageContent;
+
+            if (cache.has(page)) {
+                pageContent = cache.get(page);
+            } else {
+                pageContent = await fetchPageWithTimeout(page);
+                manageCacheSize(page);
+                cache.set(page, pageContent);
+            }
+
+            content.innerHTML = pageContent;
+            content.classList.remove("fade-out");
+            content.classList.add("fade-in");
+
+            // Logowanie odsłony strony
+            logPageView(page);
+
+            setTimeout(() => content.classList.remove("fade-in"), 300);
+        } catch (error) {
+            UI.displayError("Nie udało się załadować treści. Sprawdź połączenie internetowe.");
+            console.error("Błąd ładowania treści:", error);
+        } finally {
+            UI.hideSpinner();
+        }
+    };
+
+    // Nasłuchiwanie kliknięć w elementy nawigacji
+    nav.addEventListener("click", (e) => {
+        const target = e.target;
+        if (target.tagName === "A" && target.dataset.page) {
+            e.preventDefault();
+            const page = target.dataset.page;
+            handleNavigation(page);
+        }
+    });
+
+    // ----------- DODATKOWE FUNKCJONALNOŚCI ------------
+
+    // Back-to-top button
+    const backToTop = document.getElementById("backToTop");
+    window.addEventListener("scroll", () => {
+        if (window.scrollY > 300) {
+            backToTop.classList.add("show");
+        } else {
+            backToTop.classList.remove("show");
+        }
+    });
+
+    backToTop.addEventListener("click", () => {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    });
+
+    // Animacje przy przewijaniu z użyciem Intersection Observer
+    const observer = new IntersectionObserver((entries, observerInstance) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add("visible");
+                observerInstance.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.1
+    });
+
+    // Obserwuj wszystkie elementy oznaczone klasą "scroll-animation"
+    const animElements = document.querySelectorAll(".scroll-animation");
+    animElements.forEach(el => {
+        observer.observe(el);
     });
 });
