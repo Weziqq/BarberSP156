@@ -1,0 +1,267 @@
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Text:ital@0;1&display=swap');
+
+:root {
+    --primary-color: #444;
+    --secondary-color: #cfa760;
+    --background-color: #f2f1ef;
+    --font-family: 'Playfair Display', serif;
+    --header-font-size: 24px;
+    --h1-font-size: 50px;
+    --h2-font-size: 18px;
+    --nav-font-size: 16px;
+    --transition-duration: 0.3s;
+    --spinner-color: #cfa760;
+}
+
+/* Global box-sizing for consistent layouts */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+/* Base body styling */
+body {
+    font-family: var(--font-family);
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-color);
+    color: var(--primary-color);
+    text-align: center;
+    scroll-behavior: smooth;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Header styling */
+header {
+    background: var(--background-color);
+    padding: 30px 0;
+    font-size: var(--header-font-size);
+    animation: fadeIn 1s ease-in-out;
+}
+
+h1 {
+    font-size: var(--h1-font-size);
+    margin: 0;
+    letter-spacing: 2px;
+}
+
+h2 {
+    font-size: var(--h2-font-size);
+    color: #666;
+}
+
+h3 {
+    font-size: var(--header-font-size);
+    color: var(--primary-color);
+    margin-bottom: 20px;
+}
+
+/* Paragraph styling */
+p {
+    margin: 0 0 20px;
+    line-height: 1.6;
+}
+
+/* Navigation styling */
+nav {
+    margin-top: 20px;
+}
+
+nav::before {
+    content: '';
+    display: block;
+    width: 80%;
+    height: 1px;
+    background: rgba(242, 241, 239, 0.85);
+    margin: 0 auto 10px;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+}
+
+nav ul li {
+    position: relative;
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-size: var(--nav-font-size);
+    padding: 10px;
+    transition: color var(--transition-duration), background-color var(--transition-duration);
+    border-radius: 4px;
+}
+
+nav ul li a:hover,
+nav ul li a:focus {
+    color: var(--secondary-color);
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Dropdown styling */
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: #fff;
+    box-shadow: 0 8px 8px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    min-width: 150px;
+    z-index: 1000;
+}
+
+.dropdown:hover .dropdown-menu,
+.dropdown:focus-within .dropdown-menu {
+    display: block;
+}
+
+.dropdown-menu li {
+    margin: 5px 0;
+}
+
+.dropdown-menu li a {
+    padding: 8px;
+    display: block;
+}
+
+/* Main content styling */
+.content {
+    padding: 50px;
+    animation: fadeIn 1s ease-in-out;
+    flex: 1;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Loader/spinner for asynchronous actions */
+.spinner {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 50px;
+    height: 50px;
+    border: 5px solid rgba(0, 0, 0, 0.1);
+    border-top: 5px solid var(--spinner-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    transform: translate(-50%, -50%);
+}
+
+/* Spinner animation */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Simple fadeIn animation */
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+/* Footer styling */
+footer {
+    background-color: var(--primary-color);
+    color: #fff;
+    padding: 20px 0;
+    font-size: 14px;
+    text-align: center;
+}
+
+footer p {
+    margin: 5px 0;
+}
+
+footer a {
+    color: var(--secondary-color);
+    text-decoration: none;
+    transition: color var(--transition-duration);
+}
+
+footer a:hover,
+footer a:focus {
+    color: #fff;
+}
+
+/* Price list table styling */
+.price-list {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+.price-list td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+.price-list tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.price-list tr:hover {
+    background-color: #ddd;
+}
+
+.price-list td:first-child {
+    font-weight: bold;
+}
+
+/* Section heading and contact info styles */
+.section-title {
+    font-size: var(--header-font-size);
+    color: var(--primary-color);
+    margin-bottom: 20px;
+}
+
+.contact-info {
+    font-size: var(--nav-font-size);
+    color: var(--primary-color);
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    body {
+        font-size: 16px;
+        padding: 10px;
+    }
+
+    nav ul {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .logo {
+        width: 80%;
+        max-width: 100px;
+        height: auto;
+    }
+
+    header {
+        padding: 20px 0;
+    }
+
+    .content {
+        padding: 30px 10px;
+    }
+
+    footer {
+        padding: 10px 0;
+        font-size: 12px;
+    }
+}
